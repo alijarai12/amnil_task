@@ -14,6 +14,11 @@ pipeline {
                 script {
                     // Run Docker Compose to build the image
                     sh 'docker compose -f docker-compose.yml build'
+                    
+                    // Explicitly tag the image after building it
+                    sh "docker tag amnil-web:latest ${DOCKER_IMAGE_NAME}:latest"
+                    
+                    
                 }
             }
         }
