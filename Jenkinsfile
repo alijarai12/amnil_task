@@ -8,31 +8,40 @@ pipeline {
 
     stages {
 
-        stage('Clone GitHub Repository') {
+
+        stage('Build Image') {
             steps {
                 script {
-                    git url: "${GITHUB_REPO}", branch: 'master'
+                    // Run Docker Compose to build the image
+                    sh 'docker-compose -f docker-compose.yml build'
+                }
+            }
+        }
+        
+        stage('Tag Image') {
+            steps {
+                script {
+                    // Tag the image with the correct Docker Hub tag
+                    sh "docker tag myapp_web ${DOCKER_IMAGE}:latest"
                 }
             }
         }
 
-        stage('Build and Push Docker Image') {
+        stage('Push Image') {
             steps {
-                script {
-                    // Login to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // Login to Docker Hub
-                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USER} --password-stdin"
+                withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    script {
+                        // Log in to Docker Hub using Jenkins credentials
+                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                         
-                        // Build the image
-                        sh 'docker compose build'
-                        
-                        // Push the image to Docker Hub
-                        sh "docker push ${DOCKER_IMAGE_NAME}"
+                        // Push the tagged image to Docker Hub
+                        sh "docker push ${DOCKER_IMAGE}:latest"
                     }
                 }
             }
         }
+
+        
         stage('Run the Containers  with docker-compose ') {
             steps {
                 script {
