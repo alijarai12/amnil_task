@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     // Tag the image with the correct Docker Hub tag
-                    sh "docker tag myapp_web ${DOCKER_IMAGE}:latest"
+                    sh "docker tag myapp_web ${DOCKER_IMAGE_NAME}:latest"
                 }
             }
         }
