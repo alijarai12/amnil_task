@@ -33,10 +33,10 @@ pipeline {
                         sh "test -f docker-compose.yml || { echo 'docker-compose.yml not found!'; exit 1; }"
 
                         // Build Docker images using Docker Compose
-                        sh "docker-compose -f docker-compose.yml build"
+                        sh "docker compose -f docker-compose.yml build"
 
                         // Push the Docker images to Docker Hub using Docker Compose
-                        sh "docker-compose -f docker-compose.yml push"
+                        sh "docker compose -f docker-compose.yml push"
                     }
                 }
             }
