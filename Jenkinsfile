@@ -29,6 +29,7 @@ pipeline {
                         
                         // Push the image to Docker Hub
                         sh "docker push ${DOCKER_IMAGE}"
+                    }
                 }
             }
         }
