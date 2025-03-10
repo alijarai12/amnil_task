@@ -15,7 +15,7 @@ pipeline {
                     // Run Docker Compose to build the image
                     sh 'docker compose -f docker-compose.yml build'
                     
-                    // Explicitly tag the image after building it
+                    // tag the image after building it
                     sh "docker tag amnil-pipeline-web:latest ${DOCKER_IMAGE_NAME}:latest"
                     
                     
@@ -39,7 +39,7 @@ pipeline {
         }
 
         
-        stage('Run the Containers  with docker compose ') {
+        stage('Run the Containers with docker compose ') {
             steps {
                 script {
                     sh 'docker compose up -d'
