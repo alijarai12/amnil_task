@@ -4,7 +4,6 @@ pipeline {
         DOCKERHUB_CREDENTIALS = 'dockerhub' 
         GITHUB_REPO = 'https://github.com/alijarai12/amnil_task.git' 
         DOCKER_IMAGE_NAME = "alija10/amnil-pipeline-web" 
-        DOCKER_TAG = "latest"
     }
 
     stages {
@@ -20,14 +19,16 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    sh 'docker compose build'
-
                     // Login to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        // Login to Docker Hub
                         sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USER} --password-stdin"
-                    }
-
-                    sh 'docker push ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}'
+                        
+                        // Build the image
+                        sh 'docker compose build'
+                        
+                        // Push the image to Docker Hub
+                        sh "docker push ${DOCKER_IMAGE}"
                 }
             }
         }
