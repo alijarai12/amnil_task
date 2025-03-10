@@ -8,7 +8,14 @@ pipeline {
 
     stages {
 
-
+        stage('Clone GitHub Repository') {
+            steps {
+                script {
+                    git url: "${GITHUB_REPO}", branch: 'master'
+                }
+            }
+        }
+        
         stage('Build Image') {
             steps {
                 script {
