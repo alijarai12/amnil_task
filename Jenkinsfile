@@ -18,14 +18,6 @@ pipeline {
             }
         }
         
-        stage('Tag Image') {
-            steps {
-                script {
-                    // Tag the image with the correct Docker Hub tag
-                    sh "docker tag myapp_web ${DOCKER_IMAGE_NAME}:latest"
-                }
-            }
-        }
 
         stage('Push Image') {
             steps {
