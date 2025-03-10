@@ -16,7 +16,7 @@ pipeline {
                     sh 'docker compose -f docker-compose.yml build'
                     
                     // Explicitly tag the image after building it
-                    sh "docker tag amnil-web:latest ${DOCKER_IMAGE_NAME}:latest"
+                    sh "docker tag amnil-pipeline-web:latest ${DOCKER_IMAGE_NAME}:latest"
                     
                     
                 }
@@ -29,7 +29,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     script {
                         // Log in to Docker Hub using Jenkins credentials
-                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
                         
                         // Push the tagged image to Docker Hub
                         sh "docker push ${DOCKER_IMAGE_NAME}:latest"
