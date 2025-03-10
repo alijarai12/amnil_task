@@ -2,8 +2,6 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhub'  // Docker Hub credentials stored in Jenkins
-        IMAGE_NAME = 'myapp-image'  // Image name for Docker Hub
-        IMAGE_TAG = 'latest'  // Tag for the image
         GITHUB_REPO = 'https://github.com/alijarai12/amnil_task.git'  // GitHub repository URL
     }
 
@@ -19,8 +17,8 @@ pipeline {
             }
         }
 
-        // Stage 2: Build and Push Docker Image
-        stage('Build and Push Docker Image') {
+        // Stage 2: Build and Push Docker Images using Docker Compose
+        stage('Build and Push Docker Images') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS,
@@ -31,14 +29,14 @@ pipeline {
                         echo ${DOCKERHUB_PASSWORD} | sudo docker login -u ${DOCKERHUB_USERNAME} --password-stdin
                         """
 
-                        // Check if the Dockerfile exists in the repository
-                        sh "test -f Dockerfile || { echo 'Dockerfile not found!'; exit 1; }"
+                        // Check if the docker-compose.yml file exists in the repository
+                        sh "test -f docker-compose.yml || { echo 'docker-compose.yml not found!'; exit 1; }"
 
-                        // Build the Docker image from the Dockerfile
-                        sh "sudo docker build -t $DOCKERHUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG ."
+                        // Build Docker images using Docker Compose
+                        sh "sudo docker-compose -f docker-compose.yml build"
 
-                        // Push the built image to Docker Hub
-                        sh "sudo docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG"
+                        // Push the Docker images to Docker Hub using Docker Compose
+                        sh "sudo docker-compose -f docker-compose.yml push"
                     }
                 }
             }
@@ -60,5 +58,4 @@ pipeline {
             echo 'Pipeline failed!'
         }
     }
-
 }
