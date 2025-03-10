@@ -44,24 +44,10 @@ pipeline {
             }
         }
 
-        // Stage 3: Docker Compose Up (Optional)
-        stage('Docker Compose Up') {
-            steps {
-                script {
-                    // This stage is optional and can be skipped if Docker Compose is not needed
-                    // If Docker Compose is part of your application, this will start the containers.
-                    sh 'docker-compose up -d'  // Start the services defined in docker-compose.yml
-                }
-            }
-        }
-
-    }
-
     post {
         always {
             // Clean up resources after each build
             echo 'Pipeline finished'
-            sh 'docker system prune -f'  // Remove unused Docker images and containers
         }
 
         success {
