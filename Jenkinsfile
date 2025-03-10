@@ -28,7 +28,7 @@ pipeline {
                         sh 'docker compose build'
                         
                         // Push the image to Docker Hub
-                        sh "docker push ${DOCKER_IMAGE}"
+                        sh "docker push ${DOCKER_IMAGE_NAME}"
                     }
                 }
             }
