@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Run Docker Compose to build the image
-                    sh 'docker-compose -f docker-compose.yml build'
+                    sh 'docker compose -f docker-compose.yml build'
                 }
             }
         }
@@ -35,14 +35,14 @@ pipeline {
                         sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                         
                         // Push the tagged image to Docker Hub
-                        sh "docker push ${DOCKER_IMAGE}:latest"
+                        sh "docker push ${DOCKER_IMAGE_NAME}:latest"
                     }
                 }
             }
         }
 
         
-        stage('Run the Containers  with docker-compose ') {
+        stage('Run the Containers  with docker compose ') {
             steps {
                 script {
                     sh 'docker compose up -d'
