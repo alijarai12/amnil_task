@@ -44,6 +44,8 @@ pipeline {
             }
         }
 
+    }
+
     post {
         always {
             // Clean up resources after each build
@@ -58,4 +60,5 @@ pipeline {
             echo 'Pipeline failed!'
         }
     }
+
 }
